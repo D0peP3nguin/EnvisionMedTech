@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Request Equipment</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Available Medical Equipment</h1>
+  </header>
+  <main>
+    <section class="listing">
+      <h2>Pulse Oximeter</h2>
+      <p>Portable device for CCHD screening</p>
+      <button onclick="showForm('Pulse Oximeter')">Request</button>
+    </section>
+    <section class="listing">
+      <h2>Infant Heart Monitor</h2>
+      <p>Tracks heart rate and oxygen levels</p>
+      <button onclick="showForm('Infant Heart Monitor')">Request</button>
+    </section>
+    <section class="listing">
+      <h2>Portable Ultrasound Kit</h2>
+      <p>Handheld diagnostic imaging tool</p>
+      <button onclick="showForm('Portable Ultrasound Kit')">Request</button>
+    </section>
+
+    <div id="requestForm" class="hidden">
+      <h3>Request Form</h3>
+      <form id="clientRequestForm">
+        <input type="text" id="clientName" placeholder="Your Name" required />
+        <input type="text" id="clientAddress" placeholder="Delivery Address" required />
+        <input type="tel" id="clientContact" placeholder="Contact Number" required />
+        <input type="hidden" id="equipmentType" />
+        <button type="submit">Submit Request</button>
+      </form>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "your-project-id.firebaseapp.com",
+      projectId: "your-project-id",
+      storageBucket: "your-project-id.appspot.com",
+      messagingSenderId: "1234567890",
+      appId: "1:1234567890:web:abcdefg12345"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.showForm = function(equipmentName) {
+      document.getElementById('equipmentType').value = equipmentName;
+      document.getElementById('requestForm').classList.remove('hidden');
+      document.getElementById('requestForm').scrollIntoView({ behavior: 'smooth' });
+    };
+
+    document.getElementById('clientRequestForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('clientName').value;
+      const address = document.getElementById('clientAddress').value;
+      const contact = document.getElementById('clientContact').value;
+      const equipment = document.getElementById('equipmentType').value;
+
+      try {
+        await addDoc(collection(db, "requests"), {
+          name,
+          address,
+          contact,
+          equipment,
+          timestamp: new Date()
+        });
+        alert("Request submitted!");
+        e.target.reset();
+        document.getElementById('requestForm').classList.add('hidden');
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    });
+  </script>
+</body>
+</html>

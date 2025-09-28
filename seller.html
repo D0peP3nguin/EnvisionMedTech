@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Deliver Equipment</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Pending Deliveries</h1>
+  </header>
+  <main>
+    <ul id="deliveryList"></ul>
+
+    <h3>Driver Assignment</h3>
+    <form id="driverForm">
+      <input type="text" id="driverName" placeholder="Driver Name" required />
+      <input type="text" id="vehicleType" placeholder="Vehicle Type" required />
+      <input type="text" id="deliveryId" placeholder="Delivery ID to claim" required />
+      <button type="submit">Confirm Assignment</button>
+    </form>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "your-project-id.firebaseapp.com",
+      projectId: "your-project-id",
+      storageBucket: "your-project-id.appspot.com",
+      messagingSenderId: "1234567890",
+      appId: "1:1234567890:web:abcdefg12345"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const deliveryList = document.getElementById('deliveryList');
+    const snapshot = await getDocs(collection(db, "requests"));
+
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      const item = document.createElement('li');
+      item.innerHTML = `<strong>ID:</strong> ${docSnap.id}<br>
+                        <strong>Client:</strong> ${data.name}<br>
+                        <strong>Address:</strong> ${data.address}<br>
+                        <strong>Contact:</strong> ${data.contact}<br>
+                        <strong>Equipment:</strong> ${data.equipment}`;
+      deliveryList.appendChild(item);
+    });
+
+    document.getElementById('driverForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('driverName').value;
+      const vehicle = document.getElementById('vehicleType').value;
+      const deliveryId = document.getElementById('deliveryId').value;
+
+      try {
+        const deliveryRef = doc(db, "requests", deliveryId);
+        await updateDoc(deliveryRef, {
+          assignedTo: name,
+          vehicle,
+          status: "assigned"
+        });
+        alert("Delivery assigned!");
+        e.target.reset();
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    });
+  </script>
+</body>
+</html>

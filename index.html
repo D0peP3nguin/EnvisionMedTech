@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Envision MedTech Hub</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+
+   const firebaseConfig = {
+    apiKey: "AIzaSyC7krgo-VZsXADe_F0eHJg_HjK2UPNDWPU",
+    authDomain: "envisionmedtech-36a3a.firebaseapp.com",
+    projectId: "envisionmedtech-36a3a",
+    storageBucket: "envisionmedtech-36a3a.firebasestorage.app",
+    messagingSenderId: "583556024883",
+    appId: "1:583556024883:web:9dda5eb13e0ce5b4687146"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+        alert("Please log in to access this page.");
+        window.location.href = "login.html";
+      }
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>Envision MedTech</h1>
+    <p>Choose your role to get started</p>
+  </header>
+  <main class="center">
+    <a href="buyer.html" class="button">Request Equipment</a>
+    <a href="seller.html" class="button">Deliver Equipment</a>
+  </main>
+</body>
+</html>
