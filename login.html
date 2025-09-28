@@ -10,39 +10,12 @@
     <h1>Welcome to Envision MedTech</h1>
     <p>Sign in to continue</p>
   </header>
+
   <main>
     <button id="googleLogin">Sign in with Google</button>
   </main>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
-
-   const firebaseConfig = {
-    apiKey: "AIzaSyC7krgo-VZsXADe_F0eHJg_HjK2UPNDWPU",
-    authDomain: "envisionmedtech-36a3a.firebaseapp.com",
-    projectId: "envisionmedtech-36a3a",
-    storageBucket: "envisionmedtech-36a3a.firebasestorage.app",
-    messagingSenderId: "583556024883",
-    appId: "1:583556024883:web:62c498e588fd5626687146"
-
-};
-
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-
-    document.getElementById('googleLogin').addEventListener('click', async () => {
-      try {
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
-        alert("Signed in as " + user.email);
-        window.location.href = "index.html"; // or route by role if needed
-      } catch (err) {
-        alert("Login error: " + err.message);
-      }
-    });
-  </script>
+  <!-- ✅ Only one script — all logic lives in script.js -->
+  <script type="module" src="script.js"></script>
 </body>
 </html>

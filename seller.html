@@ -9,6 +9,7 @@
   <header>
     <h1>Pending Deliveries</h1>
   </header>
+  <button id="logoutBtn">Log Out</button>
   <main>
     <ul id="deliveryList"></ul>
 
@@ -21,6 +22,8 @@
     </form>
   </main>
 
+  <script type="module" src="script.js"></script>
+  
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
     import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
