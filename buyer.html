@@ -36,30 +36,43 @@
         <button type="submit">Submit Request</button>
       </form>
     </div>
-  </main>
+  < /main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "your-project-id.firebaseapp.com",
-      projectId: "your-project-id",
-      storageBucket: "your-project-id.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcdefg12345"
-    };
+const firebaseConfig = {
+    apiKey: "AIzaSyC7krgo-VZsXADe_F0eHJg_HjK2UPNDWPU",
+    authDomain: "envisionmedtech-36a3a.firebaseapp.com",
+    projectId: "envisionmedtech-36a3a",
+    storageBucket: "envisionmedtech-36a3a.firebasestorage.app",
+    messagingSenderId: "583556024883",
+    appId: "1:583556024883:web:62c498e588fd5626687146"
+
+};
 
     const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
     const db = getFirestore(app);
 
+    // Check if user is logged in
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+        alert("Please log in to access this page.");
+        window.location.href = "login.html";
+      }
+    });
+
+    // Show request form with selected equipment
     window.showForm = function(equipmentName) {
       document.getElementById('equipmentType').value = equipmentName;
       document.getElementById('requestForm').classList.remove('hidden');
       document.getElementById('requestForm').scrollIntoView({ behavior: 'smooth' });
     };
 
+    // Submit request to Firestore
     document.getElementById('clientRequestForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('clientName').value;

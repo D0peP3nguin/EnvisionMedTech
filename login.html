@@ -2,65 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Login</title>
+  <title>Login with Google</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1>Login to Envision MedTech</h1>
+    <h1>Welcome to Envision MedTech</h1>
+    <p>Sign in to continue</p>
   </header>
   <main>
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="password" id="password" placeholder="Password" required />
-    <select id="role">
-      <option value="buyer">Buyer</option>
-      <option value="seller">Seller</option>
-    </select>
-    <button onclick="login()">Login</button>
-    <button onclick="signup()">Sign Up</button>
+    <button id="googleLogin">Sign in with Google</button>
   </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
 
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "your-project-id.firebaseapp.com",
-      projectId: "your-project-id",
-      storageBucket: "your-project-id.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcdefg12345"
-    };
+   const firebaseConfig = {
+    apiKey: "AIzaSyC7krgo-VZsXADe_F0eHJg_HjK2UPNDWPU",
+    authDomain: "envisionmedtech-36a3a.firebaseapp.com",
+    projectId: "envisionmedtech-36a3a",
+    storageBucket: "envisionmedtech-36a3a.firebasestorage.app",
+    messagingSenderId: "583556024883",
+    appId: "1:583556024883:web:62c498e588fd5626687146"
+
+};
+
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
 
-    window.login = async function () {
-      const email = document.getElementById('email').value;
-      const pass = document.getElementById('password').value;
-      const role = document.getElementById('role').value;
-
+    document.getElementById('googleLogin').addEventListener('click', async () => {
       try {
-        await signInWithEmailAndPassword(auth, email, pass);
-        alert("Logged in!");
-        window.location.href = role === "buyer" ? "buyer.html" : "seller.html";
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        alert("Signed in as " + user.email);
+        window.location.href = "index.html"; // or route by role if needed
       } catch (err) {
         alert("Login error: " + err.message);
       }
-    };
-
-    window.signup = async function () {
-      const email = document.getElementById('email').value;
-      const pass = document.getElementById('password').value;
-
-      try {
-        await createUserWithEmailAndPassword(auth, email, pass);
-        alert("Account created!");
-      } catch (err) {
-        alert("Signup error: " + err.message);
-      }
-    };
+    });
   </script>
 </body>
 </html>
